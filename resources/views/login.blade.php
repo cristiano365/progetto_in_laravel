@@ -15,6 +15,7 @@
     <div class="container mt-5">
         <h1>Login Utente</h1>
 
+        <!--Il messaggio utilizzato è quello incapsulato nel controller in base all'esito-->
         @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}

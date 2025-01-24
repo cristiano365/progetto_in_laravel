@@ -13,7 +13,8 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable. Riempire in massa significa inserire più dati contemporaneamente; 
+     * se un campo non è fillable, laravel lo ignora per sicurezza
      *
      * @var array<int, string>
      */
@@ -21,10 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be hidden for serialization. Hidden protegge dati sensibili;
+     *  quando vuoi ottenere i dati non vengono mostrati
      *
      * @var array<int, string>
      */
@@ -42,4 +45,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * relazione Eloquent, un user ha molti event
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

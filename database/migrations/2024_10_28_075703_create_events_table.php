@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('content');
+            $table->text('description')->nullable();
+            $table->dateTime('date');
+            $table->string('location');
+            //l'evento viene eliminato se elimino anche l'utente, constrained() lega user_id alla tabella users colonna id
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('events');
     }
 };

@@ -28,6 +28,7 @@ class UserController extends Controller
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($request->password),
+            'role' => 'cliente',
         ]);
 
         event(new UserRegistered($user));
@@ -35,7 +36,8 @@ class UserController extends Controller
         // Login user
         Auth::login($user);
 
-        return redirect()->route('showRegisterForm')->with('success', 'Dati salvati con successo!');
+        return redirect()->route('dashboard')
+        ->with('success', 'Registrazione completata! Sei loggato come cliente.');
     
     }
 
@@ -53,7 +55,7 @@ class UserController extends Controller
         // Attempt to login
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended('/')->with('success', 'Login eseguito con successo!');
+            return redirect()->intended(route('dashboard'))->with('success', 'Login eseguito con successo!');
         }
 
         return back()->withErrors(['email' => 'Email o password non validi.',])->onlyInput('email');
@@ -65,4 +67,6 @@ class UserController extends Controller
         $request->session()->regenerateToken();
         return redirect('/')->with('success', 'Logout eseguito con successo!');
     }
+
+    
 }
