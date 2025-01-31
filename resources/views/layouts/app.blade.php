@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>@yield('title', 'Gestionale Eventi')</title>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+</head>
+<body class="min-h-screen bg-gray-100">
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+        <div class="text-lg font-bold">
+            <a class="border-2 p-2 bg-blue-500 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500" href="{{ route('home') }}">HOME</a>
         </div>
-    </body>
+        <div>
+            @auth
+                <span class="mr-4 text-gray-700">Ciao, {{ Auth::user()->name }}</span>
+                <form action="{{ route('logoutUser') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="bg-red-500 text-white px-3 py-2 rounded">
+                        Logout
+                    </button>
+                </form>
+            @endauth
+            
+        </div>
+    </nav>
+
+    
+    <div class="container mx-auto mt-8 px-4">
+        @yield('content')
+    </div>
+</body>
 </html>

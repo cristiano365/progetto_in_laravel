@@ -2,26 +2,41 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Event;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // - 2 admin
+        $admins = User::factory()
+            ->admin()
+            ->count(2)
+            ->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // - 2 gestori
+        $gestori = User::factory()
+            ->gestore()
+            ->count(2)
+            ->create();
 
-        $this->call([
-            PostSeeder::class
+        // - 5 clienti
+        $clienti = User::factory()
+            ->cliente()
+            ->count(5)
+            ->create();
+
+
+        // Uniamo admin e gestori in una singola collezione
+        $possibleEventOwners = $admins->merge($gestori);
+
+        // 3) Creiamo 15 eventi
+        Event::factory()->count(15)->create([
+            'user_id' => function() use ($possibleEventOwners) {
+                return $possibleEventOwners->random()->id;
+            },
         ]);
     }
 }
