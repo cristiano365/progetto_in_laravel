@@ -8,11 +8,20 @@
     <p class="text-gray-600 mb-2">
         Creato da: {{ $event->userName }}<br/>
         Data: {{ $event->date }}<br/>
-        Location: {{ $event->location }}
+        Location: {{ $event->location }}<br/>
+        Categoria: {{ $event->category ?? 'Nessuna' }}
     </p>
-    <p class="mb-4">{{ $event->description }}</p>
-    <p class="mb-4"> Contatti: {{ $event->userMail }}</p>
 
-    <a href="{{ route('events.index') }}" class="text-blue-500 hover:underline">Torna all'elenco eventi</a>
+    <p class="mb-4">
+        {{ $event->description }}
+    </p>
+
+    <p class="mb-4">
+        Contatti: {{ $event->userMail }}
+    </p>
+
+    <a href="{{ route('events.index') }}" class="text-blue-500 hover:underline">
+        Torna all'elenco eventi
+    </a>
 </div>
 @endsection

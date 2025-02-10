@@ -74,7 +74,7 @@
                 if ($editMode && $event) {
                     $dateValue = old('date', \Carbon\Carbon::parse($event->date)->format('Y-m-d\TH:i'));
                 } else {
-                    $dateValue = old('date'); 
+                    $dateValue = old('date');
                 }
             @endphp
             <input type="datetime-local"
@@ -100,22 +100,21 @@
         @if(Auth::user()->role === 'admin')
             <div>
                 <label for="gestore_id" class="block font-semibold mb-1">Assegna a Gestore</label>
-                <select name="gestore_id"
-                        id="gestore_id"
+                <select name="gestore_id" id="gestore_id"
                         class="w-full border border-gray-300 rounded px-3 py-2">
                     <option value="">-- Seleziona Gestore --</option>
                     @if($gestori && $gestori->isNotEmpty())
+                        @php
+                            $gestoreSelected = '';
+                            if($editMode && $event) {
+                                $gestoreSelected = old('gestore_id', $event->user_id);
+                            } else {
+                                $gestoreSelected = old('gestore_id');
+                            }
+                        @endphp
                         @foreach($gestori as $g)
-                            @php
-                                $selected = false;
-                                if($editMode && $event) {
-                                    $selected = old('gestore_id', $event->user_id) == $g->id;
-                                } else {
-                                    $selected = old('gestore_id') == $g->id;
-                                }
-                            @endphp
-
-                            <option value="{{ $g->id }}" @if($selected) selected @endif>
+                            <option value="{{ $g->id }}"
+                                @if($gestoreSelected == $g->id) selected @endif>
                                 {{ $g->name }} ({{ $g->email }})
                             </option>
                         @endforeach
@@ -123,6 +122,26 @@
                 </select>
             </div>
         @endif
+
+        <div>
+            <label for="category" class="block font-semibold mb-1">Categoria</label>
+            @php
+                $catValues = ['cultura','turismo','sport','esperienza','convegni'];
+                $selectedCat = ($editMode && $event)
+                    ? old('category', $event->category)
+                    : old('category');
+            @endphp
+            <select name="category" id="category"
+                    class="w-full border border-gray-300 rounded px-3 py-2">
+                <option value="">-- Nessuna Categoria --</option>
+                @foreach($catValues as $cv)
+                    <option value="{{ $cv }}"
+                        @if($selectedCat == $cv) selected @endif>
+                        {{ ucfirst($cv) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
         <button type="submit"
                 class="bg-blue-500 text-white px-4 py-2 rounded">

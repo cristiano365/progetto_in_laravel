@@ -18,9 +18,14 @@ class EventController extends Controller
     /*
     * CRUD EVENTS
     */
-    public function index()
+    public function index(Request $request)
     {
-        $events = $this->queryController->getAllEvents();
+        $cat = $request->query('category');
+        if ($cat) {
+            $events = $this->queryController->getEventsByCategory($cat);
+        } else {
+            $events = $this->queryController->getAllEvents();
+        }
         return view('events.index', compact('events'));
     }
     public function show($id)
@@ -62,7 +67,9 @@ class EventController extends Controller
             'description' => 'nullable|string',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
-            'gestore_id' => 'nullable|exists:users,id'
+            'gestore_id' => 'nullable|exists:users,id',
+            'category'    => 'nullable|string|in:cultura,turismo,sport,esperienza,convegni'
+
         ]);
 
         if ($user->role === 'admin') {
@@ -108,7 +115,9 @@ class EventController extends Controller
             'description' => 'nullable|string',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
-            'gestore_id' => 'nullable|exists:users,id'
+            'gestore_id' => 'nullable|exists:users,id',
+            'category'    => 'nullable|string|in:cultura,turismo,sport,esperienza,convegni'
+
         ]);
 
         if ($user->role === 'admin') {

@@ -65,12 +65,12 @@ class UserController extends Controller
         ]);
 
         // Create user
-        $userData  = User::create([
+        $userData  = [
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($request->password),
             'role' => 'cliente',
-        ]);
+        ];
 
         $this->queryController->saveUser($userData);
 

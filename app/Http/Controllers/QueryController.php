@@ -23,13 +23,24 @@ class QueryController extends Controller
     public function getEventById($id)
     {
         $sql = '
-            SELECT events.*, users.name as userName, users.email as userMail
+            SELECT events.*, users.name AS userName, users.email AS userMail
             FROM events
             LEFT JOIN users ON events.user_id = users.id
             WHERE events.id = ?
         ';
         $event = DB::select($sql, [$id]);
         return collect($event);
+    }
+    public function getEventsByCategory($cat)
+    { 
+        $sql = '
+            SELECT events.*, users.name AS userName, users.email AS userMail
+            FROM events
+            LEFT JOIN users ON events.user_id = users.id
+            WHERE events.category = ? 
+        ';
+        $events = DB::select($sql, [$cat]);
+        return collect($events);
     }
     public function getGestori()
     {
@@ -46,7 +57,7 @@ class QueryController extends Controller
         if ($id) {
             $sql = '
                     UPDATE events 
-                    SET title = ?, description = ?, date = ?, location = ?, user_id = ?, updated_at = ?
+                    SET title = ?, description = ?, date = ?, location = ?, user_id = ?, category = ?, updated_at = ?
                     WHERE id = ?
                 ';
             $params = [...array_values($data), now(), $id];
@@ -54,7 +65,7 @@ class QueryController extends Controller
         }
         //per creare
         $sql = '
-                    INSERT INTO events (title, description, date, location, user_id, created_at, updated_at) 
+                    INSERT INTO events (title, description, date, location, user_id, category, created_at, updated_at) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 ';
                 $params = [...array_values($data),now(), now()];
@@ -73,7 +84,8 @@ class QueryController extends Controller
     /*
     * USERS QUERY
     */
-    public function getAllUsers() {
+    public function getAllUsers() 
+    {
         $sql = '
                 SELECT users.id, users.name, users.email, users.role
                 FROM users
@@ -84,7 +96,6 @@ class QueryController extends Controller
             $users = DB::select($sql);
             return collect($users);
     }
-
     public function saveUser($data)
     {
         $sql = '

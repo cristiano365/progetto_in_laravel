@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('date');
             $table->string('location');
+            $table->enum('category', ['cultura', 'turismo', 'sport', 'esperienza', 'convegni']);
             //l'evento viene eliminato se elimino anche l'utente, constrained() lega user_id alla tabella users colonna id
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
